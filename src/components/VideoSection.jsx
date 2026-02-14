@@ -213,7 +213,7 @@ const VideoSection = ({ videoUrl, rotation = 0 }) => {
                                     transform: `rotate(${rotation}deg) scale(${scale})`,
                                     transition: 'transform 0.3s ease'
                                 }}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                 allowFullScreen
                             />
                         )}

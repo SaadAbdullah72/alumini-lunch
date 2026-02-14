@@ -11,6 +11,7 @@ import ScrollProgress from './components/ScrollProgress';
 import { AdminProvider } from './context/AdminContext';
 import { AnimatePresence } from 'framer-motion';
 import ErrorBoundary from './components/ErrorBoundary';
+import SmoothScroll from './components/SmoothScroll';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ const App = () => {
       ) : (
         <ErrorBoundary>
           <div className="app-container">
+            <SmoothScroll />
             <ScrollProgress />
             <CustomCursor />
             <SnakeBorder />
