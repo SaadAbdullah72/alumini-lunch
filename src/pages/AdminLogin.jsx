@@ -40,6 +40,8 @@ const AdminLogin = () => {
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                     <input
                         type="password"
+                        name="password"
+                        autoComplete="current-password"
                         placeholder="Enter Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
