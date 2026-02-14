@@ -24,16 +24,7 @@ const AdminDashboard = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData(prev => ({ ...prev, logo: reader.result }));
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+
 
     const handleSave = () => {
         updateSettings(formData);
@@ -190,26 +181,7 @@ const AdminDashboard = () => {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label style={{ display: 'block', marginBottom: '10px', color: '#94a3b8' }}>Society Logo</label>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                                {formData.logo && (
-                                    <img src={formData.logo} alt="Preview" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
-                                )}
-                                <label style={{
-                                    background: 'rgba(255,255,255,0.1)',
-                                    padding: '10px 20px',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '10px'
-                                }}>
-                                    <Upload size={16} /> Upload New Logo
-                                    <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
-                                </label>
-                            </div>
-                        </div>
+
 
                         <button onClick={handleSave} className="btn-primary" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                             <Save size={20} /> Save Changes

@@ -20,13 +20,15 @@ const VideoSection = ({ videoUrl, rotation = 0 }) => {
 
         // Handle YouTube
         if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let videoId;
             if (url.includes('watch?v=')) {
-                const videoId = url.split('v=')[1]?.split('&')[0];
-                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+                videoId = url.split('v=')[1]?.split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1]?.split('?')[0];
             }
-            if (url.includes('youtu.be/')) {
-                const videoId = url.split('youtu.be/')[1]?.split('?')[0];
-                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+            if (videoId) {
+                // strict autoplay policies: mute=1, autoplay=1, playsinline=1
+                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=0`;
             }
         }
 
@@ -61,14 +63,27 @@ const VideoSection = ({ videoUrl, rotation = 0 }) => {
         const video = videoRef.current;
         if (!video) return;
 
+        // Force play on mount (helps with some browsers)
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Auto-play was prevented:", error);
+                // Fallback: Mute and try again if not already muted
+                video.muted = true;
+                video.play();
+            });
+        }
+
         const updateProgress = () => {
-            const val = (video.currentTime / video.duration) * 100;
-            setProgress(val);
+            if (video.duration) {
+                const val = (video.currentTime / video.duration) * 100;
+                setProgress(val);
+            }
         };
 
         video.addEventListener('timeupdate', updateProgress);
         return () => video.removeEventListener('timeupdate', updateProgress);
-    }, []);
+    }, [videoUrl]); // Re-run if URL changes
 
     const isNativeVideo = videoUrl && videoUrl.startsWith('data:');
 
@@ -92,9 +107,9 @@ const VideoSection = ({ videoUrl, rotation = 0 }) => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
                     style={{
-                        maxWidth: '700px', // Reduced size
+                        maxWidth: '700px',
                         margin: '0 auto',
-                        padding: '0', // Removed padding for sleeker look
+                        padding: '0',
                         overflow: 'hidden',
                         borderRadius: '16px',
                         position: 'relative'
@@ -112,6 +127,8 @@ const VideoSection = ({ videoUrl, rotation = 0 }) => {
                                     muted
                                     loop
                                     playsInline
+                                    webkit-playsinline="true"
+                                    x5-playsinline="true"
                                     onClick={togglePlay}
                                     style={{
                                         position: 'absolute',

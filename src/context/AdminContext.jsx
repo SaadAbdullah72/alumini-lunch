@@ -1,11 +1,15 @@
 import { createContext, useState, useEffect, useContext } from 'react';
+import * as jsonbin from '../services/jsonbin';
 
 const AdminContext = createContext();
+
+// HARDCODED LOGO (Put your file in public/logo.png)
+const HARDCODED_LOGO = "/logo.png";
 
 const defaultSettings = {
     eventTitle: "Annual Alumni Lunch 2026",
     eventDate: "2026-03-15T12:00",
-    logo: null,
+    logo: HARDCODED_LOGO,
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     videoRotation: 0,
     registrationLink: "https://docs.google.com/forms",
@@ -81,34 +85,59 @@ const deleteVideoFromDB = async () => {
 export const AdminProvider = ({ children }) => {
     const [settings, setSettings] = useState(() => {
         const saved = localStorage.getItem('alumniSettings');
-        return saved ? JSON.parse(saved) : defaultSettings;
+        return saved ? { ...JSON.parse(saved), logo: HARDCODED_LOGO } : defaultSettings;
     });
 
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         return sessionStorage.getItem('adminAuth') === 'true';
     });
 
-    // Load video from DB on mount
+    // Load initial settings
     useEffect(() => {
-        const loadVideo = async () => {
+        const loadSettings = async () => {
+            // 1. Try fetching from Cloud (Latest Truth)
+            const cloudSettings = await jsonbin.getSettings();
+
+            if (cloudSettings) {
+                // Keep the hardcoded logo, trigger update
+                const merged = { ...settings, ...cloudSettings, logo: HARDCODED_LOGO };
+                setSettings(merged);
+                localStorage.setItem('alumniSettings', JSON.stringify(merged));
+            } else {
+                // Fallback to LocalStorage if cloud fails
+                const saved = localStorage.getItem('alumniSettings');
+                if (saved) {
+                    try {
+                        setSettings(prev => ({ ...prev, ...JSON.parse(saved) }));
+                    } catch (e) {
+                        console.error("Failed to parse local settings");
+                    }
+                }
+            }
+            // Load heavy video from IndexedDB if needed
             const videoData = await getVideoFromDB();
             if (videoData) {
                 setSettings(prev => ({ ...prev, videoUrl: videoData }));
             }
         };
-        loadVideo();
+        loadSettings();
     }, []);
 
     // Save changes
     const updateSettings = async (newSettings) => {
+        // Enforce hardcoded logo
+        const settingsToProcess = { ...newSettings, logo: HARDCODED_LOGO };
+
         // 1. Separate video if it's a large data URL
-        let settingsToSave = { ...newSettings };
+        let settingsToSave = { ...settingsToProcess };
         let videoToSave = null;
 
         if (newSettings.videoUrl && newSettings.videoUrl.startsWith('data:')) {
             videoToSave = newSettings.videoUrl;
             // Don't save large string to localStorage
             settingsToSave.videoUrl = 'indexed_db_blob';
+            // For JSONBin, we mark it as local file
+            settingsToSave.videoUrl = 'local_file_active';
         } else {
             // If we are saving a link (or nothing), clear any old video from DB to prevent zombie loading
             await deleteVideoFromDB();
@@ -119,7 +148,6 @@ export const AdminProvider = ({ children }) => {
             localStorage.setItem('alumniSettings', JSON.stringify(settingsToSave));
         } catch (e) {
             console.error("LocalStorage Limit Exceeded:", e);
-            alert("Settings saved, but data might be too large for some browsers.");
         }
 
         // 3. Save heavy video to IndexedDB
@@ -128,7 +156,12 @@ export const AdminProvider = ({ children }) => {
         }
 
         // 4. Update memory state immediately for UI
-        setSettings(newSettings);
+        setSettings(settingsToProcess);
+
+        // 5. Sync to Cloud (JSONBin) - Global Sync
+        if (settingsToSave.videoUrl !== 'local_file_active') {
+            await jsonbin.updateSettings(settingsToSave);
+        }
     };
 
     const login = (password) => {
