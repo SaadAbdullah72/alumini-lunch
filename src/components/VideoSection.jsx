@@ -142,10 +142,52 @@ const VideoSection = ({ videoUrl, rotation = 0 }) => {
                                         transition: 'transform 0.3s ease',
                                         cursor: 'pointer'
                                     }}
+                                    onPlay={() => setIsPlaying(true)}
+                                    onPause={() => setIsPlaying(false)}
                                 />
-                                {/* Custom Overlay Controls */}
+                                {/* Random Thumbnail on Pause Overlay */}
                                 <AnimatePresence>
-                                    {isHovered && (
+                                    {!isPlaying && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            onClick={togglePlay}
+                                            style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                background: 'rgba(0,0,0,0.4)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                zIndex: 10
+                                            }}
+                                        >
+                                            {/* Removed Random Image - Now shows video frame underneath */}
+                                            <div style={{ zIndex: 20 }}>
+                                                <div style={{
+                                                    background: 'rgba(255, 255, 255, 0.2)',
+                                                    backdropFilter: 'blur(4px)',
+                                                    borderRadius: '50%',
+                                                    padding: '30px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    <Play size={48} fill="white" />
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+                                {/* Custom Overlay Controls (Only show when playing/hovered and NOT paused) */}
+                                <AnimatePresence>
+                                    {isHovered && isPlaying && (
                                         <motion.div
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
