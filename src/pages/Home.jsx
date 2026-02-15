@@ -6,6 +6,8 @@ import VideoSection from '../components/VideoSection';
 import WhyAttend from '../components/WhyAttend';
 import Registration from '../components/Registration';
 import RevealSection from '../components/RevealSection';
+import EventHighlights from '../components/EventHighlights';
+import MemoryGallery from '../components/MemoryGallery';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -27,51 +29,97 @@ const Home = () => {
                 <VideoSection videoUrl={settings.videoUrl} rotation={settings.videoRotation} />
             </RevealSection>
 
+            <MemoryGallery />
+
             <RevealSection delay={0.3}>
                 <WhyAttend />
             </RevealSection>
 
             <RevealSection delay={0.4}>
-                <Registration link={settings.registrationLink} />
+                <EventHighlights />
             </RevealSection>
 
             <RevealSection delay={0.5}>
                 <footer style={{
                     textAlign: 'center',
-                    padding: '40px',
-                    marginTop: '80px',
-                    borderTop: '1px solid rgba(255,255,255,0.1)',
+                    padding: '50px 20px 35px',
+                    marginTop: '60px',
                     position: 'relative',
-                    overflow: 'hidden'
                 }}>
+                    {/* Top gradient line */}
                     <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '60%',
+                        width: '180px',
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent)'
+                        background: 'linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent)',
+                        margin: '0 auto 30px auto',
                     }} />
 
+                    {/* "Crafted by" label */}
                     <p style={{
-                        color: '#94a3b8',
-                        fontSize: '0.9rem',
-                        letterSpacing: '1px',
-                        marginBottom: '10px'
+                        color: '#64748b',
+                        fontSize: '0.75rem',
+                        letterSpacing: '4px',
+                        textTransform: 'uppercase',
+                        marginBottom: '18px',
+                        fontWeight: '500',
                     }}>
-                        &copy; 2026 Alumni Association
+                        Crafted with ♥ by
                     </p>
 
-                    <p style={{
-                        background: 'linear-gradient(to right, #cbd5e1, #fff, #cbd5e1)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        fontSize: '1rem',
-                        fontWeight: '500',
-                        letterSpacing: '0.5px'
+                    {/* Credits row */}
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '20px',
+                        flexWrap: 'wrap',
+                        marginBottom: '28px',
                     }}>
-                        Developed by <span style={{ fontWeight: '700', color: '#f59e0b', WebkitTextFillColor: '#f59e0b' }}>SAAD ABDULLAH</span> (23-SE-30)
+                        <span style={{
+                            color: '#22d3ee',
+                            fontSize: '1.1rem',
+                            fontWeight: '700',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            textShadow: '0 0 15px rgba(6, 182, 212, 0.4)',
+                        }}>
+                            Saad Abdullah
+                        </span>
+
+                        <span style={{ color: '#06b6d4', fontSize: '0.6rem', opacity: 0.5 }}>✦</span>
+
+                        <span style={{
+                            color: '#22d3ee',
+                            fontSize: '1.1rem',
+                            fontWeight: '700',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            textShadow: '0 0 15px rgba(6, 182, 212, 0.4)',
+                        }}>
+                            Samia Zia
+                        </span>
+
+                        <span style={{ color: '#06b6d4', fontSize: '0.6rem', opacity: 0.5 }}>✦</span>
+
+                        <span style={{
+                            color: '#22d3ee',
+                            fontSize: '1.1rem',
+                            fontWeight: '700',
+                            letterSpacing: '1.5px',
+                            textTransform: 'uppercase',
+                            textShadow: '0 0 15px rgba(6, 182, 212, 0.4)',
+                        }}>
+                            Ayesha Zia
+                        </span>
+                    </div>
+
+                    <p style={{
+                        color: '#475569',
+                        fontSize: '0.72rem',
+                        letterSpacing: '1px',
+                        margin: 0,
+                    }}>
+                        &copy; 2026 Alumni Association
                     </p>
                 </footer>
             </RevealSection>

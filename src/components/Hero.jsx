@@ -24,8 +24,6 @@ const Hero = ({ title }) => {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
                 background: 'radial-gradient(circle at center, #1e293b 0%, #0f172a 100%)',
                 position: 'relative',
                 overflow: 'hidden'
@@ -105,10 +103,34 @@ const Hero = ({ title }) => {
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundSize: '200% auto',
-                    animation: 'shine 3s linear infinite'
+                    animation: 'shine 3s linear infinite',
+                    marginBottom: '2.5rem'
                 }}>
                     Join us for an afternoon of networking, nostalgia, and celebration.
                 </p>
+
+                <motion.a
+                    href={settings.registrationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5, duration: 0.5 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        textDecoration: 'none',
+                        padding: '16px 40px',
+                        fontSize: '1.1rem',
+                        boxShadow: '0 0 30px rgba(245, 158, 11, 0.3)',
+                        letterSpacing: '1px'
+                    }}
+                >
+                    Register Now
+                </motion.a>
             </motion.div>
 
             <motion.div
