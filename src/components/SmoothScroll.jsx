@@ -4,14 +4,16 @@ import Lenis from 'lenis';
 const SmoothScroll = () => {
     useEffect(() => {
         const lenis = new Lenis({
-            duration: 2.0, // Increased for "butter" feel
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential ease-out
+            duration: 1.8,
+            easing: (t) => 1 - Math.pow(1 - t, 4), // Quartic ease-out — ultra smooth deceleration
             orientation: 'vertical',
             gestureOrientation: 'vertical',
             smoothWheel: true,
-            wheelMultiplier: 1.2, // Slightly faster to match the longer duration
+            wheelMultiplier: 0.9, // Slower = smoother feel
             smoothTouch: false,
-            touchMultiplier: 2,
+            touchMultiplier: 1.5,
+            lerp: 0.08, // Lower = silkier interpolation
+            infinite: false,
         });
 
         function raf(time) {
