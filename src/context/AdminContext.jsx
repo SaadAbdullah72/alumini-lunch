@@ -165,7 +165,7 @@ export const AdminProvider = ({ children }) => {
     };
 
     const login = (password) => {
-        if (password === 'saad489254') {
+        if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
             setIsAuthenticated(true);
             sessionStorage.setItem('adminAuth', 'true');
             return true;
