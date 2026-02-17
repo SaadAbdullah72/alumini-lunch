@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import * as jsonbin from '../services/jsonbin';
+import bcrypt from 'bcryptjs';
 
 const AdminContext = createContext();
 
@@ -165,7 +166,8 @@ export const AdminProvider = ({ children }) => {
     };
 
     const login = (password) => {
-        if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
+        const hash = import.meta.env.VITE_ADMIN_PASSWORD_HASH;
+        if (bcrypt.compareSync(password, hash)) {
             setIsAuthenticated(true);
             sessionStorage.setItem('adminAuth', 'true');
             return true;

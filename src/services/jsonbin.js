@@ -1,5 +1,5 @@
-const MASTER_KEY = '$2a$10$TGVruk5OPC7Xrwv9k6Y7auV/7RPAscIL0yYHMWyeBiTwgl4s5IeaG';
-const BIN_ID = '6990d73aae596e708f2b145f';
+const MASTER_KEY = import.meta.env.VITE_JSONBIN_KEY;
+const BIN_ID = import.meta.env.VITE_JSONBIN_BIN_ID;
 const BASE_URL = 'https://api.jsonbin.io/v3/b';
 
 export const getSettings = async () => {
