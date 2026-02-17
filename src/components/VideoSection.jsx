@@ -6,34 +6,52 @@ import { Play, Pause } from 'lucide-react';
 const VideoSection = ({ videoUrl, rotation = 0 }) => {
     // Helper to Convert Links to Embeds
     const getEmbedUrl = (url) => {
-        if (!url) return "https://www.youtube.com/embed/dQw4w9WgXcQ?mute=1&autoplay=1";
+        const DEFAULT_VIDEO = "dQw4w9WgXcQ";
+        if (!url) return `https://www.youtube.com/embed/${DEFAULT_VIDEO}?mute=1&autoplay=1`;
 
         // Handle Instagram Reels/Posts
         if (url.includes('instagram.com')) {
-            // Remove query params and trailing slash, add /embed
             const cleanUrl = url.split('?')[0].replace(/\/$/, "");
-            if (!cleanUrl.endsWith('/embed')) {
-                return `${cleanUrl}/embed`;
-            }
-            return cleanUrl;
+            return cleanUrl.endsWith('/embed') ? cleanUrl : `${cleanUrl}/embed`;
         }
 
         // Handle YouTube
-        if (url.includes('youtube.com') || url.includes('youtu.be')) {
-            let videoId;
-            if (url.includes('watch?v=')) {
+        if (url.includes('youtube.com') || url.includes('youtu.be') || /^[a-zA-Z0-9_-]{11}$/.test(url)) {
+            let videoId = "";
+
+            // 1. Direct ID
+            if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
+                videoId = url;
+            }
+            // 2. Shorts
+            else if (url.includes('/shorts/')) {
+                videoId = url.split('/shorts/')[1]?.split(/[?&]/)[0];
+            }
+            // 3. Watch URL
+            else if (url.includes('watch?v=')) {
                 videoId = url.split('v=')[1]?.split('&')[0];
-            } else if (url.includes('youtu.be/')) {
+            }
+            // 4. Short URL
+            else if (url.includes('youtu.be/')) {
                 videoId = url.split('youtu.be/')[1]?.split('?')[0];
             }
-            if (videoId) {
-                // strict autoplay policies: mute=1, autoplay=1, playsinline=1
-                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=0`;
+            // 5. Already Embed URL (but maybe missing params)
+            else if (url.includes('/embed/')) {
+                videoId = url.split('/embed/')[1]?.split('?')[0];
             }
+
+            if (videoId) {
+                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&playsinline=1&controls=1`;
+            }
+
+            // If it's a youtube link but we couldn't find an ID, don't return the raw URL (which might be the root)
+            // Show the default instead of a broken frame
+            if (url.includes('youtube.com')) return `https://www.youtube.com/embed/${DEFAULT_VIDEO}?mute=1&autoplay=1`;
         }
 
         return url;
     };
+
 
     const finalUrl = getEmbedUrl(videoUrl);
 
