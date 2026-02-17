@@ -124,10 +124,33 @@ export const AdminProvider = ({ children }) => {
         loadSettings();
     }, []);
 
+    const [loginAttempts, setLoginAttempts] = useState(0);
+    const [lockoutTime, setLockoutTime] = useState(0);
+
+    // Security Sanitizer
+    const sanitize = (val) => {
+        if (typeof val !== 'string') return val;
+        return val
+            .replace(/<script.*?>.*?<\/script>/gi, '') // Remove scripts
+            .replace(/[&<>"']/g, (m) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;',
+                '"': '&quot;', "'": '&#39;'
+            }[m])) // Escape HTML
+            .slice(0, 1000); // Length limit
+    };
+
     // Save changes
     const updateSettings = async (newSettings) => {
+        // Build sanitized settings
+        const sanitized = {};
+        Object.keys(newSettings).forEach(key => {
+            sanitized[key] = sanitize(newSettings[key]);
+        });
+
         // Enforce hardcoded logo
-        const settingsToProcess = { ...newSettings, logo: HARDCODED_LOGO };
+        const settingsToProcess = { ...sanitized, logo: HARDCODED_LOGO };
+
+        // ... rest of the logic
 
         // 1. Separate video if it's a large data URL
         let settingsToSave = { ...settingsToProcess };
@@ -166,14 +189,29 @@ export const AdminProvider = ({ children }) => {
     };
 
     const login = (password) => {
+        // Check lockout
+        if (Date.now() < lockoutTime) {
+            alert(`Too many attempts. Please wait ${Math.ceil((lockoutTime - Date.now()) / 1000)} seconds.`);
+            return false;
+        }
+
         const hash = import.meta.env.VITE_ADMIN_PASSWORD_HASH;
         if (bcrypt.compareSync(password, hash)) {
             setIsAuthenticated(true);
+            setLoginAttempts(0);
             sessionStorage.setItem('adminAuth', 'true');
             return true;
+        } else {
+            const newAttempts = loginAttempts + 1;
+            setLoginAttempts(newAttempts);
+            if (newAttempts >= 5) {
+                setLockoutTime(Date.now() + 30000); // 30s lockout
+                setLoginAttempts(0);
+            }
+            return false;
         }
-        return false;
     };
+
 
     const logout = () => {
         setIsAuthenticated(false);
