@@ -8,6 +8,7 @@ import Registration from '../components/Registration';
 import RevealSection from '../components/RevealSection';
 import EventHighlights from '../components/EventHighlights';
 import MemoryGallery from '../components/MemoryGallery';
+import RuleBook from '../components/RuleBook';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -37,6 +38,10 @@ const Home = () => {
 
             <RevealSection delay={0.4}>
                 <EventHighlights />
+            </RevealSection>
+
+            <RevealSection delay={0.5}>
+                <RuleBook />
             </RevealSection>
 
             <RevealSection delay={0.5}>
