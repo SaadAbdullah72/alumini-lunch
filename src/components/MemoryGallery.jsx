@@ -57,7 +57,7 @@ const MemoryCard = ({ src, index, height, objectPosition = 'center', objectFit =
                 style={{
                     width: '100%',
                     height: height === 'auto' ? 'auto' : '100%',
-                    objectFit: height === 'auto' ? 'none' : objectFit,
+                    objectFit: height === 'auto' ? 'contain' : objectFit,
                     objectPosition: objectPosition,
                     display: 'block',
                     transition: 'transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease',
