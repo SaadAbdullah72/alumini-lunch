@@ -15,7 +15,7 @@ const galleryItems = [
     { src: "/gallery/11.jpg.jpeg", height: '345px' },
     { src: "/gallery/12.jpg.jpeg", height: '265px' },
     { src: "/gallery/13.jpg.jpeg", height: '420px', objectPosition: 'top' },
-    { src: "/gallery/14.jpg.jpeg", height: '335px' },
+    { src: "/gallery/14.jpg.jpeg", height: 'auto' },
     { src: "/gallery/18.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/19.jpg.jpeg", height: 'auto' },
     { src: "/gallery/20.jpg.jpeg", height: '420px', objectPosition: 'top' },
