@@ -17,14 +17,14 @@ const galleryItems = [
     { src: "/gallery/13.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/14.jpg.jpeg", height: '335px' },
     { src: "/gallery/18.jpg.jpeg", height: '420px', objectPosition: 'top' },
-    { src: "/gallery/19.jpg.jpeg", height: '420px', objectPosition: 'center' },
+    { src: "/gallery/19.jpg.jpeg", height: 'auto' },
     { src: "/gallery/20.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/22.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/23.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/24.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/25.jpg.jpeg", height: '420px', objectPosition: 'top' },
     { src: "/gallery/26.jpg.jpeg", height: '420px', objectPosition: 'top' },
-    { src: "/gallery/27.jpg.jpeg", height: '420px', objectPosition: 'top' }
+    { src: "/gallery/27.jpg.jpeg", height: 'auto' }
 ];
 
 const MemoryCard = ({ src, index, height, objectPosition = 'center', objectFit = 'cover' }) => {
@@ -56,8 +56,8 @@ const MemoryCard = ({ src, index, height, objectPosition = 'center', objectFit =
                 className="memory-card-img"
                 style={{
                     width: '100%',
-                    height: '100%',
-                    objectFit: objectFit,
+                    height: height === 'auto' ? 'auto' : '100%',
+                    objectFit: height === 'auto' ? 'none' : objectFit,
                     objectPosition: objectPosition,
                     display: 'block',
                     transition: 'transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease',
