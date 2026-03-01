@@ -1,32 +1,33 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const images = [
-    "/gallery/1.jpg.jpg",
-    "/gallery/2.jpg.jpg",
-    "/gallery/3.jpg.jpg",
-    "/gallery/4.jpg.jpg",
-    "/gallery/5.jpg.jpg",
-    "/gallery/6.jpg.jpg",
-    "/gallery/7.jpg.jpg",
-    "/gallery/8.jpg.jpg",
-    "/gallery/9.jpg.jpeg",
-    "/gallery/10.jpg.jpeg",
-    "/gallery/11.jpg.jpeg",
-    "/gallery/12.jpg.jpeg",
-    "/gallery/13.jpg.jpeg",
-    "/gallery/14.jpg.jpeg",
-    "/gallery/18.jpg.jpeg"
+const galleryItems = [
+    { src: "/gallery/1.jpg.jpg", height: '320px' },
+    { src: "/gallery/2.jpg.jpg", height: '260px' },
+    { src: "/gallery/3.jpg.jpg", height: '350px' },
+    { src: "/gallery/4.jpg.jpg", height: '290px' },
+    { src: "/gallery/5.jpg.jpg", height: '340px' },
+    { src: "/gallery/6.jpg.jpg", height: '280px' },
+    { src: "/gallery/7.jpg.jpg", height: '310px' },
+    { src: "/gallery/8.jpg.jpg", height: '270px' },
+    { src: "/gallery/9.jpg.jpeg", height: '330px' },
+    { src: "/gallery/10.jpg.jpeg", height: '275px' },
+    { src: "/gallery/11.jpg.jpeg", height: '345px' },
+    { src: "/gallery/12.jpg.jpeg", height: '265px' },
+    { src: "/gallery/13.jpg.jpeg", height: '340px', objectPosition: 'top' },
+    { src: "/gallery/14.jpg.jpeg", height: '335px' },
+    { src: "/gallery/18.jpg.jpeg", height: '285px' },
+    { src: "/gallery/19.jpg.jpeg", height: '310px' },
+    { src: "/gallery/20.jpg.jpeg", height: '275px' },
+    { src: "/gallery/21.jpg.jpeg", height: '340px' },
+    { src: "/gallery/22.jpg.jpeg", height: '290px' },
+    { src: "/gallery/23.jpg.jpeg", height: '325px' },
+    { src: "/gallery/24.jpg.jpeg", height: '300px' },
+    { src: "/gallery/25.jpg.jpeg", height: '345px' },
+    { src: "/gallery/26.jpg.jpeg", height: '270px' }
 ];
 
-const cardHeights = [
-    '320px', '260px', '350px', '290px',
-    '340px', '280px', '310px', '270px',
-    '330px', '275px', '345px', '265px',
-    '300px', '335px', '285px'
-];
-
-const MemoryCard = ({ src, index, height }) => {
+const MemoryCard = ({ src, index, height, objectPosition = 'center' }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 60 }}
@@ -57,6 +58,7 @@ const MemoryCard = ({ src, index, height }) => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
+                    objectPosition: objectPosition,
                     display: 'block',
                     transition: 'transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), filter 0.5s ease',
                     filter: 'brightness(0.85)',
@@ -169,8 +171,8 @@ const MemoryGallery = () => {
 
                 {/* Gallery Grid */}
                 <div className="memory-gallery-grid">
-                    {images.map((img, i) => (
-                        <MemoryCard key={i} src={img} index={i} height={cardHeights[i]} />
+                    {galleryItems.map((item, i) => (
+                        <MemoryCard key={i} src={item.src} index={i} height={item.height} objectPosition={item.objectPosition} />
                     ))}
                 </div>
             </div>
